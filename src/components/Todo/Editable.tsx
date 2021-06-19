@@ -97,11 +97,11 @@ const Editable = (props: any) => {
                                         {/* </label> */}
                                     </Form.Group>
 
-                                    <Button variant="secondary" block onClick={() => props.onCloseModal()}>
-                                        Cancel
-                                    </Button>
                                     <Button variant="primary" block onClick={() => handleSubmit()}>
                                         Submit
+                                    </Button>
+                                    <Button variant="danger" block onClick={() => props.onCloseModal()}>
+                                        Cancel
                                     </Button>
                                 </Form>
                             )}

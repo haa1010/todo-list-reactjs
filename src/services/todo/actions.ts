@@ -39,7 +39,6 @@ export const getTodoListFailure = (): GetTodoListFailureAction => {
 };
 
 export const addTodo = (payload: TodoInfo): AddTodoAction => {
-    console.log('pl', payload);
     return {
         type: ADD_TODO_ACTIONS.ADD,
         payload,
@@ -60,7 +59,6 @@ export const AddTodoFailure = (): AddTodoFailureAction => {
 };
 
 export const editTodo = (payload: TodoInfo): EditTodoAction => {
-    console.log('pl', payload);
     return {
         type: EDIT_TODO_ACTIONS.EDIT,
         payload,
@@ -81,7 +79,6 @@ export const editTodoFailure = (): EditTodoFailureAction => {
 };
 
 export const deleteTodo = (payload: number): DeleteTodoAction => {
-    console.log('pl', payload);
     return {
         type: DELETE_TODO_ACTIONS.DELETE,
         payload,

@@ -1,72 +1,85 @@
 import { Button, Modal } from 'react-bootstrap';
-import React, { FormEvent, useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { useHistory } from 'react-router-dom';
 
 import { GlobalState } from '../../services';
-import Header from '../../components/Header/Header';
 import Todo from '../../components/Todo/Todo';
 import Add from '../../components/Add/Add';
 import Edit from '../../components/Edit/Edit';
+import Pagination from '../../components/Pagination/Pagination';
 import './HomeStyles.scss';
 import { TodoInfo } from '../../services/todo/types';
 import { getTodoList } from '../../services/todo/actions';
 
 const Home: React.FunctionComponent = (): React.ReactElement => {
-    const history = useHistory();
     const dispatch = useDispatch();
     const todoList = useSelector((state: GlobalState) => state.todo.todoList);
-
-    // let showList = todoList;
-    const logOut = () => {
-        history.push('/login');
-    };
 
     const [showAdd, setShowAdd] = useState(false);
     const [showEdit, setShowEdit] = useState(false);
     const [editItem, setEditItem] = useState<TodoInfo>();
     const [showList, setShowList] = useState(todoList);
     const [search, setSearch] = useState<string | undefined>();
+    const [isSearching, setIsSearching] = useState(false);
+    const [searchTmp, setSearchTmp] = useState<string | undefined>();
+    const [filteredList, setFilteredList] = useState(todoList);
+    const [pageState, setPageState] = useState({
+        currentPage: 1,
+        todosPerPage: 10,
+    });
 
     useEffect(() => {
-        dispatch(getTodoList());
+        if (!(Array.isArray(todoList) && todoList.length)) dispatch(getTodoList());
     }, []);
+
     useEffect(() => {
-        setShowList(todoList);
+        setFilteredList(todoList);
+        setIsSearching(false);
     }, [todoList]);
 
-    const resetList = () => {
-        setShowList(todoList);
-    };
+    useEffect(() => {
+        setShowList(filteredList.slice(indexOfFirstPost, indexOfLastPost));
+    }, [pageState, filteredList]);
 
-    const handleCloseAdd = () => {
-        setShowAdd(false);
-        // resetList();
-    };
-    const handleShowAdd = () => {
-        setShowAdd(true);
-    };
-    const handleCloseEdit = () => {
-        setShowEdit(false);
-        // resetList();
-    };
+    // modal edit/add show/hide
+    const handleCloseAdd = () => setShowAdd(false);
+    const handleShowAdd = () => setShowAdd(true);
+    const handleCloseEdit = () => setShowEdit(false);
+
     const handleShowEdit = (item: TodoInfo) => {
         setEditItem(item);
         setShowEdit(true);
     };
 
+    // search
     const searchHandler = (event: any) => {
         event.preventDefault();
-        const tmp = todoList.filter((e) => {
-            return e.title.includes(search ? search : '');
-        });
-        setShowList(tmp);
+        setFilteredList(
+            todoList.filter((e) => {
+                return e.title.includes(search ? search : '');
+            }),
+        );
+        setSearchTmp(search);
+        setIsSearching(true);
+        setShowList(filteredList.slice(indexOfFirstPost, indexOfLastPost));
     };
 
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const entered = event.target.value;
         setSearch(entered);
     };
+    const deleteSearch = () => {
+        setIsSearching(false);
+        setFilteredList(todoList);
+        setShowList(todoList.slice(indexOfFirstPost, indexOfLastPost));
+    };
+
+    // pagination
+    const { currentPage, todosPerPage } = pageState;
+    const indexOfLastPost = currentPage * todosPerPage;
+    const indexOfFirstPost = indexOfLastPost - todosPerPage;
+
+    const paginate = (pageNum: number) => setPageState({ ...pageState, currentPage: pageNum });
 
     return (
         <div className="">
@@ -85,26 +98,34 @@ const Home: React.FunctionComponent = (): React.ReactElement => {
                     </button>
                 </form>
             </nav>
-            {/* <Button onClick={logOut} type="primary">
-                Logout
-            </Button> */}
-            <Button variant="primary" onClick={handleShowAdd}>
-                Add new item to TodoList
-            </Button>
+            {isSearching ? (
+                <Button onClick={() => deleteSearch()} variant="outline-danger">
+                    &times; Search result for: {searchTmp}
+                </Button>
+            ) : (
+                <Button variant="primary" onClick={handleShowAdd}>
+                    Add new item to TodoList
+                </Button>
+            )}
+
             <Modal show={showAdd} onHide={handleCloseAdd}>
-                <Add onCloseHandler={handleCloseAdd} onReset={resetList} />
+                <Add onCloseHandler={handleCloseAdd} />
             </Modal>
 
             <Modal show={showEdit} onHide={handleCloseEdit}>
-                <Edit onCloseHandler={handleCloseEdit} data={editItem} onReset={resetList} />
+                <Edit onCloseHandler={handleCloseEdit} data={editItem} />
             </Modal>
 
-            {showList &&
+            {showList.length ? (
                 showList.map((todo, index) => (
                     <div key={index}>
                         <Todo todo={todo} onEdit={() => handleShowEdit(todo)} />
                     </div>
-                ))}
+                ))
+            ) : (
+                <h3>No results</h3>
+            )}
+            <Pagination todosPerPage={todosPerPage} totalTodos={filteredList.length} paginate={paginate} />
         </div>
     );
 };

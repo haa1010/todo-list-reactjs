@@ -56,6 +56,7 @@ export const notify: Notify = {
 };
 
 const showToast = (message: any, title: any, options: ToastOptions = toastOptions, status: NotificationStatus) => {
+    console.log('show');
     toast(
         ({ closeToast }) => <Notification message={message} title={title} status={status} onClose={closeToast} />,
         options,

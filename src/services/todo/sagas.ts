@@ -1,5 +1,7 @@
 import { put, takeEvery, call, all } from 'redux-saga/effects';
 
+import { notify } from '../../common/utils/notify';
+
 import {
     TODO_ACTIONS,
     ADD_TODO_ACTIONS,
@@ -36,6 +38,8 @@ function* AddTodoSaga(action: AddTodoAction) {
         const result: TodoInfo = yield call(() => todoApis.addTodo(action.payload));
         console.log(result);
         yield put(AddTodoSuccess(result));
+        // notify.success('New todo item added!', 'Success');
+        // console.log('addddd');
     } catch (error) {
         yield put(AddTodoFailure());
     }
