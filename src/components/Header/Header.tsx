@@ -10,22 +10,24 @@ export interface HeaderProps {
     }[];
 }
 
-const Header: React.FunctionComponent<HeaderProps> = ({ tabs }): React.ReactElement => {
+// const Header: React.FunctionComponent<HeaderProps> = ({ tabs }): React.ReactElement => {
+const Header = () => {
     const history = useHistory();
-    const match = useRouteMatch();
-
-    const callback = (path: string) => {
-        history.push(path);
-    };
+    const nav = [
+        { title: 'Home', path: '/' },
+        { title: 'Add', path: '/add' },
+        // { title: 'Edit', path: '/edit' },
+    ];
 
     return (
-        <Tabs defaultActiveKey={match.path} onChange={callback}>
-            {tabs.map((tab) => (
-                <Tab key={tab.title} title={tab.title} eventKey={tab.path}>
-                    {tab.title}
-                </Tab>
-            ))}
-        </Tabs>
+        <nav className="navbar navbar-light bg-light justify-content-end">
+            <form className="form-inline">
+                <input className="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" />
+                <button className="btn btn-outline-primary my-2 my-sm-0" type="submit">
+                    Search
+                </button>
+            </form>
+        </nav>
     );
 };
 

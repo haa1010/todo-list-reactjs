@@ -24,8 +24,8 @@ const Login: React.FunctionComponent = (): React.ReactElement => {
     };
 
     return (
-        <div className="container">
-            <Col className="mt-5 mb-5">
+        <div className="card">
+            <Col className="col-7 mt-5 mb-5">
                 <Card className="admin-login__container">
                     <Card.Body>
                         <h3 className="text-center my-5">Administrator Login</h3>

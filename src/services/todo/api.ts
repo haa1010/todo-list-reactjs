@@ -19,12 +19,29 @@ const todoApis = {
     //     const results = AxiosClient.put(`/${id}`, data);
     //     return results;
     // },
-    // post: (data: TodoInfo): Promise<any> => {
-    //     const results = AxiosClient.post(`/${id}`, data);
-    // return results;
+    addTodo: (data: TodoInfo): Promise<any> => {
+        const results = AxiosClient.post<TodoInfo>('', {
+            title: data.title,
+            userId: data.userId,
+            completed: data.completed,
+        });
+        console.log('res', results);
+        return results;
+    },
     // },
-    delete: (id: number): Promise<any> => {
-        const results = AxiosClient.get(`/${id}`);
+    editTodo: (data: TodoInfo): Promise<any> => {
+        console.log('id', data);
+        const results = AxiosClient.put<TodoInfo>(`/${data.id}`, {
+            title: data.title,
+            userId: data.userId,
+            completed: data.completed,
+        });
+        console.log('res', results);
+        return results;
+    },
+    deleteTodo: (id: number): Promise<any> => {
+        const results = AxiosClient.delete<TodoInfo>(`/${id}`);
+        console.log('res', results);
         return results;
     },
 };
