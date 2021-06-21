@@ -1,6 +1,7 @@
 import { Button, Modal } from 'react-bootstrap';
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import { useLocation, useHistory } from 'react-router-dom';
 
 import { GlobalState } from '../../services';
 import Todo from '../../components/Todo/Todo';
@@ -10,18 +11,21 @@ import Pagination from '../../components/Pagination/Pagination';
 import './HomeStyles.scss';
 import { TodoInfo } from '../../services/todo/types';
 import { getTodoList } from '../../services/todo/actions';
+import Search from '../../components/Search/Search';
 
 const Home: React.FunctionComponent = (): React.ReactElement => {
     const dispatch = useDispatch();
+    const history = useHistory();
+    const location = useLocation();
+
     const todoList = useSelector((state: GlobalState) => state.todo.todoList);
+    let search = new URLSearchParams(location.search).get('search');
 
     const [showAdd, setShowAdd] = useState(false);
     const [showEdit, setShowEdit] = useState(false);
     const [editItem, setEditItem] = useState<TodoInfo>();
     const [showList, setShowList] = useState(todoList);
-    const [search, setSearch] = useState<string | undefined>();
     const [isSearching, setIsSearching] = useState(false);
-    const [searchTmp, setSearchTmp] = useState<string | undefined>();
     const [filteredList, setFilteredList] = useState(todoList);
     const [pageState, setPageState] = useState({
         currentPage: 1,
@@ -41,6 +45,14 @@ const Home: React.FunctionComponent = (): React.ReactElement => {
         setShowList(filteredList.slice(indexOfFirstPost, indexOfLastPost));
     }, [pageState, filteredList]);
 
+    useEffect(() => {
+        search = search ? search : '';
+        console.log('search=', search);
+        if (search.length > 0) {
+            searchHandler();
+        }
+    }, [search]);
+
     // modal edit/add show/hide
     const handleCloseAdd = () => setShowAdd(false);
     const handleShowAdd = () => setShowAdd(true);
@@ -52,26 +64,21 @@ const Home: React.FunctionComponent = (): React.ReactElement => {
     };
 
     // search
-    const searchHandler = (event: any) => {
-        event.preventDefault();
+    const searchHandler = () => {
         setFilteredList(
             todoList.filter((e) => {
                 return e.title.includes(search ? search : '');
             }),
         );
-        setSearchTmp(search);
         setIsSearching(true);
-        setShowList(filteredList.slice(indexOfFirstPost, indexOfLastPost));
     };
 
-    const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const entered = event.target.value;
-        setSearch(entered);
-    };
     const deleteSearch = () => {
+        history.push({
+            pathname: '/',
+        });
         setIsSearching(false);
         setFilteredList(todoList);
-        setShowList(todoList.slice(indexOfFirstPost, indexOfLastPost));
     };
 
     // pagination
@@ -83,24 +90,10 @@ const Home: React.FunctionComponent = (): React.ReactElement => {
 
     return (
         <div className="">
-            <nav className="navbar navbar-light bg-light justify-content-end" onSubmit={searchHandler}>
-                <form className="form-inline">
-                    <input
-                        className="form-control mr-sm-2"
-                        type="search"
-                        placeholder="Search"
-                        aria-label="Search"
-                        value={search}
-                        onChange={handleChange}
-                    />
-                    <button className="btn btn-outline-primary my-2 my-sm-0" type="submit">
-                        Search
-                    </button>
-                </form>
-            </nav>
+            <Search></Search>
             {isSearching ? (
                 <Button onClick={() => deleteSearch()} variant="outline-danger">
-                    &times; Search result for: {searchTmp}
+                    &times; Search result for: {search}
                 </Button>
             ) : (
                 <Button variant="primary" onClick={handleShowAdd}>
@@ -113,7 +106,7 @@ const Home: React.FunctionComponent = (): React.ReactElement => {
             </Modal>
 
             <Modal show={showEdit} onHide={handleCloseEdit}>
-                <Edit onCloseHandler={handleCloseEdit} data={editItem} />
+                {editItem && <Edit onCloseHandler={handleCloseEdit} data={editItem} />}
             </Modal>
 
             {showList.length ? (

@@ -6,7 +6,7 @@ import { TodoInfo } from '../../services/todo/types';
 import { editTodo } from '../../services/todo/actions';
 import { GlobalState } from '../../services';
 
-const Edit = (props: any) => {
+const Edit = (props: { data: TodoInfo; onCloseHandler: () => void }) => {
     const todoList = useSelector((state: GlobalState) => state.todo.todoList);
     const dispatch = useDispatch();
     console.log('edit', todoList);
@@ -14,7 +14,7 @@ const Edit = (props: any) => {
         props.onCloseHandler();
     };
     const EditTodoHandler = (data: TodoInfo) => {
-        console.log(data);
+        // console.log(data);
         dispatch(editTodo(data));
         closeModal();
     };

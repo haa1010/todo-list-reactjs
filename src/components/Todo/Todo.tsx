@@ -3,9 +3,10 @@ import { Button } from 'react-bootstrap';
 import { useDispatch } from 'react-redux';
 
 import { deleteTodo } from '../../services/todo/actions';
+import { TodoInfo } from '../../services/todo/types';
 import './Todo.scss';
 
-const Todo = (props: any) => {
+const Todo = (props: { todo: TodoInfo; onEdit: () => void }) => {
     const todo = props.todo;
     const dispatch = useDispatch();
     const onDeleteHandler = () => {

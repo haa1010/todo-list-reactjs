@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Pagination = (props: any) => {
+const Pagination = (props: { todosPerPage: number; totalTodos: number; paginate: (num: number) => void }) => {
     const { todosPerPage, totalTodos, paginate } = props;
 
     const pageNumbers = [];

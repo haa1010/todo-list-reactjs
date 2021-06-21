@@ -2,9 +2,6 @@ import React from 'react';
 import './App.scss';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 
-import Header from './components/Header/Header';
-import Add from './components/Add/Add';
-import Edit from './components/Edit/Edit';
 import { getLoadableHelper } from './common/utils/loadableRoute';
 
 const Login = getLoadableHelper(() => import('./pages/auth/Login/Login'));

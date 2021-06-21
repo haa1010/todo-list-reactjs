@@ -6,7 +6,12 @@ import './Editable.scss';
 
 import { TodoInfo } from '../../services/todo/types';
 
-const Editable = (props: any) => {
+const Editable = (props: {
+    title: string;
+    onSubmitHandler: (value: TodoInfo) => void;
+    onCloseModal: () => void;
+    item?: TodoInfo;
+}) => {
     const formTodoSchema = Yup.object().shape({
         title: Yup.string().required('This field is required'),
         userId: Yup.string().required('This field is required'),
