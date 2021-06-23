@@ -73,13 +73,13 @@
     &--warning {
         background-color: $notification-warning;
         #{$root}__body {
-            border: 2px solid $notification-warning
+            border: 2px solid $notification-warning;
         }
     }
     &--error {
         background-color: $notification-error;
         #{$root}__body {
-            border: 2px solid $notification-error
+            border: 2px solid $notification-error;
         }
     }
 }

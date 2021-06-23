@@ -1,7 +1,7 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
 
-import Editable from '../Todo/Editable';
+import Editable from '../Todo/TodoModal';
 import { TodoInfo } from '../../services/todo/types';
 import { addTodo } from '../../services/todo/actions';
 

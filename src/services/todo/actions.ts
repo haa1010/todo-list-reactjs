@@ -16,6 +16,14 @@ import {
     DeleteTodoAction,
     DeleteTodoFailureAction,
     DeleteTodoSuccessAction,
+    SearchAction,
+    SEARCH_ACTIONS,
+    SearchSuccessAction,
+    SearchFailureAction,
+    ChangePageAction,
+    ChangePageSuccessAction,
+    ChangePageFailureAction,
+    CHANGE_PAGE_ACTIONS,
 } from './types';
 
 export const getTodoList = (): GetTodoListAction => {
@@ -95,5 +103,45 @@ export const deleteTodoSuccess = (payload: number): DeleteTodoSuccessAction => {
 export const deleteTodoFailure = (): DeleteTodoFailureAction => {
     return {
         type: DELETE_TODO_ACTIONS.FAILURE,
+    };
+};
+
+export const search = (payload: string): SearchAction => {
+    return {
+        type: SEARCH_ACTIONS.SEARCH,
+        payload,
+    };
+};
+
+export const searchSuccess = (payload: string): SearchSuccessAction => {
+    return {
+        type: SEARCH_ACTIONS.SUCCESS,
+        payload,
+    };
+};
+
+export const searchFailure = (): SearchFailureAction => {
+    return {
+        type: SEARCH_ACTIONS.FAILURE,
+    };
+};
+
+export const changePage = (payload: number): ChangePageAction => {
+    return {
+        type: CHANGE_PAGE_ACTIONS.CHANGE,
+        payload,
+    };
+};
+
+export const changePageSuccess = (payload: number): ChangePageSuccessAction => {
+    return {
+        type: CHANGE_PAGE_ACTIONS.SUCCESS,
+        payload,
+    };
+};
+
+export const changePageFailure = (): ChangePageFailureAction => {
+    return {
+        type: CHANGE_PAGE_ACTIONS.FAILURE,
     };
 };

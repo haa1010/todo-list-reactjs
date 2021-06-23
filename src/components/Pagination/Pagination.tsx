@@ -1,20 +1,40 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
-const Pagination = (props: { todosPerPage: number; totalTodos: number; paginate: (num: number) => void }) => {
-    const { todosPerPage, totalTodos, paginate } = props;
+import { GlobalState } from '../../services';
+import { changePage } from '../../services/todo/actions';
 
+const Pagination = () => {
+    const dispatch = useDispatch();
+    const todoList = useSelector((state: GlobalState) => state.todo.todoList);
+    const pageConfig = useSelector((state: GlobalState) => state.todo.paginationConfig);
+
+    const [activePage, setActivePage] = useState(1);
     const pageNumbers = [];
+    const todosPerPage = pageConfig.todosPerPage;
+    const totalTodos = todoList.length;
 
     for (let i = 1; i <= Math.ceil(totalTodos / todosPerPage); i++) {
         pageNumbers.push(i);
     }
 
+    const changePageHandler = (num: number) => {
+        dispatch(changePage(num));
+    };
+
     return (
         <nav>
             <ul className="pagination justify-content-center">
                 {pageNumbers.map((num) => (
-                    <li className="page-item" key={num}>
-                        <a onClick={() => paginate(num)} href="#" className="page-link">
+                    <li key={num} className={'page-item ' + (num === activePage ? 'active' : ' ')}>
+                        <a
+                            onClick={() => {
+                                changePageHandler(num);
+                                setActivePage(num);
+                            }}
+                            href="#"
+                            className="page-link"
+                        >
                             {num}
                         </a>
                     </li>

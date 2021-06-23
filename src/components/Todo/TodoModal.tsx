@@ -2,30 +2,31 @@ import React from 'react';
 import * as Yup from 'yup';
 import { Formik, Field } from 'formik';
 import { Button, Card, Col, Form } from 'react-bootstrap';
-import './Editable.scss';
+import './TodoModal.scss';
 
 import { TodoInfo } from '../../services/todo/types';
 
-const Editable = (props: {
+interface TodoModal {
     title: string;
     onSubmitHandler: (value: TodoInfo) => void;
     onCloseModal: () => void;
     item?: TodoInfo;
-}) => {
+}
+
+const Editable: React.FC<TodoModal> = ({ title, onSubmitHandler, onCloseModal, item }) => {
     const formTodoSchema = Yup.object().shape({
         title: Yup.string().required('This field is required'),
         userId: Yup.string().required('This field is required'),
-        completed: Yup.bool().required('This field is required'),
     });
 
-    const item = props.item ? props.item : { id: 1, title: '', userId: 1, completed: false };
+    item = item ? item : { id: 1, title: '', userId: 1, completed: false };
 
     return (
         <div className="card">
             <Col className="mt-5 mb-5">
                 <Card className="admin-login__container">
                     <Card.Body>
-                        <h3 className="text-center my-5">{props.title}</h3>
+                        <h3 className="text-center my-5">{title}</h3>
                         <Formik
                             initialValues={{
                                 id: item.id,
@@ -37,11 +38,7 @@ const Editable = (props: {
                             validationSchema={formTodoSchema}
                             enableReinitialize
                             onSubmit={(values: TodoInfo) => {
-                                values.completed = '' + values.completed === 'true' ? true : false;
-                                props.onSubmitHandler(values);
-                            }}
-                            onChange={(values: TodoInfo) => {
-                                console.log(values);
+                                onSubmitHandler(values);
                             }}
                         >
                             {({ handleSubmit, handleChange, values, touched, errors }) => (
@@ -81,31 +78,16 @@ const Editable = (props: {
                                         )}
                                     </Form.Group>
 
-                                    <Form.Group controlId="formCompleted" role="group">
-                                        <Form.Label className="completed">Completed</Form.Label>
-                                        <Field
-                                            name="completed"
-                                            value="true"
-                                            className="mr-2 leading-tight"
-                                            type="radio"
-                                            checked={'' + values.completed === 'true'}
-                                        />
-                                        <span className="text-sm true-ratio">Yes</span>
-                                        <Field
-                                            name="completed"
-                                            value="false"
-                                            className="mr-2 leading-tight"
-                                            type="radio"
-                                            checked={'' + values.completed === 'false'}
-                                        />
-                                        <span className="text-sm">Not yet</span>
-                                        {/* </label> */}
+                                    <Form.Group>
+                                        <label>
+                                            <Field type="checkbox" name="completed" />
+                                            Completed
+                                        </label>
                                     </Form.Group>
-
                                     <Button variant="primary" block onClick={() => handleSubmit()}>
                                         Submit
                                     </Button>
-                                    <Button variant="danger" block onClick={() => props.onCloseModal()}>
+                                    <Button variant="danger" block onClick={() => onCloseModal()}>
                                         Cancel
                                     </Button>
                                 </Form>

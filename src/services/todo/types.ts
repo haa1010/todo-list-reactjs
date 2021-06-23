@@ -22,6 +22,18 @@ export const DELETE_TODO_ACTIONS = {
     SUCCESS: 'DELETE_TODO_SUCCESS',
 };
 
+export const SEARCH_ACTIONS = {
+    SEARCH: 'SEARCH',
+    FAILURE: 'SEARCH_FAILURE',
+    SUCCESS: 'SEARCH_SUCCESS',
+};
+
+export const CHANGE_PAGE_ACTIONS = {
+    CHANGE: 'CHANGE',
+    FAILURE: 'CHANGE_PAGE_FAILURE',
+    SUCCESS: 'CHANGE_PAGE_SUCCESS',
+};
+
 interface TodoInfo {
     userId: number;
     id: number;
@@ -84,6 +96,34 @@ interface DeleteTodoFailureAction {
     type: typeof DELETE_TODO_ACTIONS.FAILURE;
 }
 
+interface SearchAction {
+    type: typeof SEARCH_ACTIONS.SEARCH;
+    payload: string;
+}
+
+interface SearchSuccessAction {
+    type: typeof SEARCH_ACTIONS.SUCCESS;
+    payload: string;
+}
+
+interface SearchFailureAction {
+    type: typeof SEARCH_ACTIONS.FAILURE;
+}
+
+interface ChangePageAction {
+    type: typeof CHANGE_PAGE_ACTIONS.CHANGE;
+    payload: number;
+}
+
+interface ChangePageSuccessAction {
+    type: typeof CHANGE_PAGE_ACTIONS.SUCCESS;
+    payload: number;
+}
+
+interface ChangePageFailureAction {
+    type: typeof CHANGE_PAGE_ACTIONS.FAILURE;
+}
+
 export type {
     TodoInfo,
     GetTodoListFailureAction,
@@ -98,4 +138,10 @@ export type {
     DeleteTodoAction,
     DeleteTodoFailureAction,
     DeleteTodoSuccessAction,
+    SearchAction,
+    SearchFailureAction,
+    SearchSuccessAction,
+    ChangePageAction,
+    ChangePageFailureAction,
+    ChangePageSuccessAction,
 };

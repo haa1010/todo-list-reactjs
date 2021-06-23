@@ -6,11 +6,13 @@ import { deleteTodo } from '../../services/todo/actions';
 import { TodoInfo } from '../../services/todo/types';
 import './Todo.scss';
 
-const Todo = (props: { todo: TodoInfo; onEdit: () => void }) => {
-    const todo = props.todo;
+interface TodoProp {
+    todo: TodoInfo;
+    onEdit: (todo: TodoInfo) => void;
+}
+const Todo: React.FunctionComponent<TodoProp> = ({ todo, onEdit }) => {
     const dispatch = useDispatch();
     const onDeleteHandler = () => {
-        // console.log()
         dispatch(deleteTodo(todo.id));
     };
     return (
@@ -24,7 +26,7 @@ const Todo = (props: { todo: TodoInfo; onEdit: () => void }) => {
                 </h6>
                 <p className="card-text">{todo.title}</p>
                 <p className="card-text">Complete: {todo.completed ? 'Yes' : 'Not yet'}</p>
-                <Button className="card-link" type="primary" onClick={props.onEdit}>
+                <Button className="card-link" type="primary" onClick={() => onEdit(todo)}>
                     Edit
                 </Button>
                 <Button className="card-link" variant="danger" onClick={onDeleteHandler}>

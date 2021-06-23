@@ -1,21 +1,22 @@
 import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 
-import Editable from '../Todo/Editable';
+import Editable from '../Todo/TodoModal';
 import { TodoInfo } from '../../services/todo/types';
 import { editTodo } from '../../services/todo/actions';
-import { GlobalState } from '../../services';
 
-const Edit = (props: { data: TodoInfo; onCloseHandler: () => void }) => {
-    const todoList = useSelector((state: GlobalState) => state.todo.todoList);
+interface EditProp {
+    item: TodoInfo;
+    onCloseHandler: () => void;
+}
+
+const Edit: React.FC<EditProp> = ({ item, onCloseHandler }) => {
     const dispatch = useDispatch();
-    console.log('edit', todoList);
     const closeModal = () => {
-        props.onCloseHandler();
+        onCloseHandler();
     };
-    const EditTodoHandler = (data: TodoInfo) => {
-        // console.log(data);
-        dispatch(editTodo(data));
+    const EditTodoHandler = (item: TodoInfo) => {
+        dispatch(editTodo(item));
         closeModal();
     };
 
@@ -24,7 +25,7 @@ const Edit = (props: { data: TodoInfo; onCloseHandler: () => void }) => {
             onSubmitHandler={EditTodoHandler}
             onCloseModal={closeModal}
             title="Edit item to TodoList"
-            item={props.data}
+            item={item}
         />
     );
 };

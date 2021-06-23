@@ -28,11 +28,11 @@ sagaMiddleware.run(rootSaga);
 
 ReactDOM.render(
     <Provider store={store}>
-        <React.StrictMode>
+        <React.Fragment>
             <PersistGate loading={null} persistor={persistor}>
                 <App />
             </PersistGate>
-        </React.StrictMode>
+        </React.Fragment>
     </Provider>,
     document.getElementById('root'),
 );

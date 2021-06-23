@@ -32,6 +32,8 @@ const Notification: React.FC<NotificationProps> = ({ message, title, status, onC
         return notificationStatus[status];
     };
 
+    console.log(message);
+
     return (
         <div className={`notification ${getNotificationStatus().className}`}>
             <div className={'notification__icon'}>{getNotificationStatus().icon}</div>

@@ -1,33 +1,32 @@
 import React, { useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 
-const Search = () => {
-    const history = useHistory();
+import { changePage, search } from '../../services/todo/actions';
 
-    const [search, setSearch] = useState<string | undefined>();
-    const searchHandler = (event: any) => {
+const searchStr = () => {
+    const dispatch = useDispatch();
+
+    const [searchStr, setSearchStr] = useState<string>('');
+    const searchStrHandler = (event: any) => {
         event.preventDefault();
-        history.push({
-            pathname: '/',
-            search: `?search=${search}`,
-        });
-        setSearch('');
+        dispatch(changePage(1));
+        dispatch(search(searchStr));
     };
 
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const entered = event.target.value;
-        setSearch(entered);
+        setSearchStr(entered);
     };
 
     return (
-        <nav className="navbar navbar-light bg-light justify-content-end" onSubmit={searchHandler}>
+        <nav className="navbar navbar-light bg-light justify-content-end" onSubmit={searchStrHandler}>
             <form className="form-inline">
                 <input
                     className="form-control mr-sm-2"
-                    type="search"
-                    placeholder="Search"
-                    aria-label="Search"
-                    value={search}
+                    type="searchStr"
+                    placeholder="search"
+                    aria-label="searchStr"
+                    value={searchStr}
                     onChange={handleChange}
                 />
                 <button className="btn btn-outline-primary my-2 my-sm-0" type="submit">
@@ -38,4 +37,4 @@ const Search = () => {
     );
 };
 
-export default Search;
+export default searchStr;
